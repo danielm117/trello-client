@@ -24,7 +24,7 @@ class BoardController extends Controller
 
         $client = new Client();
 
-        $url = "https://trello.com/1/member/me/boards?key=8ca1273dba5f29780127f5a0373f81df&token=a5da84e9ff815e4e828c40e825a5eb0a0c2ef3d00fae53c3fbd9cf2eebdfac0e";
+        $url = "https://trello.com/1/member/me/boards?key=$this->key&token=$this->token";
 
         $response = $client->get($url);
         // $response = $boards->send();
@@ -74,7 +74,19 @@ class BoardController extends Controller
      */
     public function show($id)
     {
-        //
+        $url = "https://trello.com/1/boards/$id/cards?key=$this->key&token=$this->token";
+        
+        $client = new Client();
+        $response = $client->get($url);
+        // $response = $boards->send();
+        $cards = json_decode(($response->getBody()->getContents()));
+        // echo "<pre>";
+        // print_r($cards);
+        // echo "</pre>";
+        return view("trello.board", ['cards' => $cards]);
+
+        // dd($id);
+
     }
 
     /**

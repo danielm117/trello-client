@@ -19,15 +19,20 @@
         </div>
         <hr>
         @foreach ($boards as $board)
-        @if ($board->closed != 1)
         <div class="row">
             <div  id="{{$board->shortLink}}" class="col-md-12">
-                <h2> {{$board->name}} </h2>
-                <a href="{{$board->shortUrl}}"><p> {{$board->shortUrl}}</p></a>
+                <h2> {{$board->name}}</h2>
+            @if ($board->closed != 1)
+                <a href="{{route ('board', ['id' => $board->shortLink])}}">
+                    <button type="button"  id ="login" class="btn  btn-success">Show</button>
+                </a>
+            @else
+                <p style="color: red;">Status Closed</p>
+            @endif                
+                <a href="{{$board->shortUrl}}"><p>{{$board->shortUrl}}</p></a>
                 <p>Date Last Activity {{$board->dateLastActivity}}</p>
             </div>
         </div>
-        @endif
         @endforeach
     </div>
 

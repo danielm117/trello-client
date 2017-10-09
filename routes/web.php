@@ -18,3 +18,4 @@ Route::get('/', function () {
 
 Route::name('home')->get('/trello', 'StartController@index');
 Route::name('boards')->get('/trello/boards', 'BoardController@index');
+Route::name('board')->get('/trello/board/{id}', 'BoardController@show');
