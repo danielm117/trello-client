@@ -28,7 +28,7 @@ class StartController extends Controller
             'response_type' => 'token'
         ];
 
-        $url = "https://trello.com/1/authorize?expiration=never&name=TrelloClient&key=8ca1273dba5f29780127f5a0373f81df&return_url=http://127.0.0.1:8000/trello/boards&scope=read,write&response_type=token";
+        $url = "https://trello.com/1/authorize?callback_method=fragment&expiration=never&name=TrelloClient&key=8ca1273dba5f29780127f5a0373f81df&return_url=http://127.0.0.1:8000/trello/boards&scope=read,write&response_type=token";
 
         // $url = "https://trello.com/1/authorize?expiration=never&name=TrelloMiguel&key=8ca1273dba5f29780127f5a0373f81df&return_url=http://google.com&scope=read,write,account&response_type=token";
 

@@ -17,10 +17,11 @@ class BoardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request = null)
     {
-
-        $this->getTokenFromUrl();
+        // dd(session()->all());
+        // dd($request);
+        // $this->getTokenFromUrl();
 
         $client = new Client();
 
@@ -52,7 +53,7 @@ class BoardController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -63,7 +64,17 @@ class BoardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        // dd($request->list);
+        $url = "https://api.trello.com/1/cards?".
+                "idList=$request->list&".
+                "name=$request->name&".
+                "key=$this->key&token=$this->token";
+        // dd($rul);
+        $client = new Client();
+        $response = $client->post($url);
+        return back();
+        // dd($request->name);
     }
 
     /**
@@ -74,16 +85,17 @@ class BoardController extends Controller
      */
     public function show($id)
     {
-        $url = "https://trello.com/1/boards/$id/cards?key=$this->key&token=$this->token";
-        
         $client = new Client();
+        $url = "https://trello.com/1/boards/$id/cards?key=$this->key&token=$this->token";
         $response = $client->get($url);
-        // $response = $boards->send();
         $cards = json_decode(($response->getBody()->getContents()));
-        // echo "<pre>";
-        // print_r($cards);
-        // echo "</pre>";
-        return view("trello.board", ['cards' => $cards]);
+        
+        
+        $url_lists = "https://trello.com/1/boards/$id/lists?key=$this->key&token=$this->token";
+        $response = $client->get($url_lists);
+        $lists = json_decode(($response->getBody()->getContents()));
+        
+        return view("trello.board", ['cards' => $cards, 'lists'=>$lists]);
 
         // dd($id);
 
@@ -104,11 +116,20 @@ class BoardController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
+        $url = "https://api.trello.com/1/cards/$id?".
+                "idList=$request->list&".
+                "name=$request->name&".
+                "key=$this->key&token=$this->token";
+        // dd($rul);
+        $client = new Client();
+        $response = $client->put($url);
+        return back();
+
+        // dd($id);
         //
     }
 
@@ -118,8 +139,13 @@ class BoardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
+        $url = "https://api.trello.com/1/cards/$id?key=$this->key&token=$this->token";
+        // dd($rul);
+        $client = new Client();
+        $response = $client->delete($url);
+        return back();
         //
     }
 }
