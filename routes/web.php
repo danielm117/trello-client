@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+	
 
-
-Route::get('/trello', 'StartController@index');
+Route::name('home')->get('/trello', 'StartController@index');
+Route::name('boards')->get('/trello/boards', 'BoardController@index');

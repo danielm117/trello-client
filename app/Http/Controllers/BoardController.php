@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use GuzzleHttp\Client;
 
-
-class StartController extends Controller
+class BoardController extends Controller
 {
-
+    private $token = "a5da84e9ff815e4e828c40e825a5eb0a0c2ef3d00fae53c3fbd9cf2eebdfac0e";
+   
+    private $key = "8ca1273dba5f29780127f5a0373f81df";
+    
     /**
      * Display a listing of the resource.
      *
@@ -16,31 +19,30 @@ class StartController extends Controller
      */
     public function index()
     {
+
+        $this->getTokenFromUrl();
+
         $client = new Client();
-        $url = "https://trello.com/1/authorize";
+
+        $url = "https://trello.com/1/member/me/boards?key=8ca1273dba5f29780127f5a0373f81df&token=a5da84e9ff815e4e828c40e825a5eb0a0c2ef3d00fae53c3fbd9cf2eebdfac0e";
+
+        $response = $client->get($url);
+        // $response = $boards->send();
+        $boards = json_decode(($response->getBody()->getContents()));
+        // echo "<pre>";
+        // print_r($boards);
+        // echo "</pre>";
+
+        return view("trello.boards", ['boards' => $boards]);
+  
+
         
-        $params = [
-            'expiration' =>  'never',
-            'name' =>  'TrelloClient',
-            'key' => '8ca1273dba5f29780127f5a0373f81df',
-            'return_url' => 'http://soluciona.la/a.php',
-            'scope' => 'read,write',
-            'response_type' => 'token'
-        ];
+    }
 
-        $url = "https://trello.com/1/authorize?expiration=never&name=TrelloClient&key=8ca1273dba5f29780127f5a0373f81df&return_url=http://127.0.0.1:8000/trello/boards&scope=read,write&response_type=token";
-
-        // $url = "https://trello.com/1/authorize?expiration=never&name=TrelloMiguel&key=8ca1273dba5f29780127f5a0373f81df&return_url=http://google.com&scope=read,write,account&response_type=token";
-
-        $trello_authorize = $client->get($url);
-
-        // $trello_authorize = $client->request('GET', $url, $params);
-        // $trello_authorize = $client->request('GET', 'http://www.example.com/', $params);
-
-        // echo $res->getStatusCode(); // 200
-        // echo $trello_authorize->getBody();
-
-        return view("trello.index", ['url' => $url]);
+    private function getTokenFromUrl(){
+        // echo "token";
+        // $actual_link = $_SERVER["REQUEST_URI"];
+        // print_r($actual_link);
     }
 
     /**
